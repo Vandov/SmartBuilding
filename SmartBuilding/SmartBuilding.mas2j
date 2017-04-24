@@ -1,0 +1,12 @@
+/* Jason Project */
+
+MAS smartBuilding {
+
+    infrastructure: Centralised
+
+    environment: Building
+
+    agents: doorman #1; security #2; paramedic #3;
+
+}
+
