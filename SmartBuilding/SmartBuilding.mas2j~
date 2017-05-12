@@ -8,7 +8,7 @@ MAS smartBuilding {
 
     environment: Building
 
-    agents: doorman #1; security #2; paramedic #3;
+    agents: doorman; security_1 ; security_2; paramedic #3; 
 
 }
 
