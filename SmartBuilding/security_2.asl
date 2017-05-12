@@ -9,7 +9,7 @@
 /* Initial goals */
 
 
-
+!start.
 !move.
 
 
@@ -17,7 +17,7 @@
 /* Plans */
 
 
-//+!start : true <- .print("I am the security.").
++!start : true <- .print("I am working now.").
 +!move : true 
 	<- next(security_2);
 		!move.

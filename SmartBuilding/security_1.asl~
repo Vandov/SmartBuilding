@@ -19,6 +19,6 @@
 
 //+!start : true <- .print("I am the security.").
 +!move : true 
-	<- next(id);
+	<- next(security_1);
 		!move.
 

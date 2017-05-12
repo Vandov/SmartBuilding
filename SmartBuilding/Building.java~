@@ -14,14 +14,20 @@ import java.util.logging.Logger;
 public class Building extends Environment {
 
 	public static final int INJURED  = 16;
-
 	public static final int GSize=10;
+	
 	private BuildingModel model;
     private BuildingView  view;
 	
 	public static final Term    s1 = Literal.parseLiteral("next(security_1)");
 	public static final Term    s2 = Literal.parseLiteral("next(security_2)");
+    public static final Term    grabInj = Literal.parseLiteral("grag(injured)");
+    public static final Term    dropInj = Literal.parseLiteral("drop(injured)");
+    public static final Term    healInj = Literal.parseLiteral("heal(injured)");
 	
+	//public static final Literal inj1 = Literal.parseLiteral("injured(?)");
+    //public static final Literal inj2 = Literal.parseLiteral("injured(?)");
+
     private Logger logger = Logger.getLogger("SmartBuilding.mas2j."+Building.class.getName());
 
     /** Called before the MAS execution with the args informed in .mas2j */
@@ -46,8 +52,12 @@ public class Building extends Environment {
                 model.nextSlot(1);
             }else if (action.equals(s2)){
 				model.nextSlot(2);
-			}else {
-                return false;
+			}else if (action.equals(grabInj)){
+                // model.grabInj();
+            }else if (action.equals(dropInj)){
+                // model.dropInj();
+            }else if (action.equals(healInj)){
+                // model.healInj();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,6 +106,10 @@ public class Building extends Environment {
 	
 	class BuildingModel extends GridWorldModel {
 
+		boolean param_1_hasGarb = false;
+		boolean param_2_hasGarb = false;
+		boolean param_3_hasGarb = false;
+		
         private BuildingModel() {
 			// Size of the map, num of agents to display
             super(GSize, GSize, 6);
@@ -117,6 +131,8 @@ public class Building extends Environment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+			
+			//add(INJURED, 5, 5);
 		}
 		
 		void nextSlot(int securityID) throws Exception {
@@ -150,6 +166,19 @@ public class Building extends Environment {
 			setAgPos(5, getAgPos(5));
 		}
 		
+		void moveTowards(int x, int y) throws Exception {
+            // TODO: paramedic moves toward injured
+        }
+		
+		void grabInj() {
+            // TODO
+        }
+        void dropInj() {
+            // TODO
+        }
+        void healInj() {
+            // TODO
+        }
     }
 	
 	class BuildingView extends GridWorldView {
