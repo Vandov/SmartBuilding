@@ -51,7 +51,11 @@ public class Building extends Environment {
             if (action.equals(s1)) {
                 model.nextSlot(1);
             }else if (action.equals(s2)){
-				model.nextSlot(2);
+				model.nextSlot(2);	
+			}else if (action.getFunctor().equals("move_towards")) {
+                int x = (int)((NumberTerm)action.getTerm(0)).solve();
+                int y = (int)((NumberTerm)action.getTerm(1)).solve();
+                model.moveTowards(x,y);
 			}else if (action.equals(grabInj)){
                 // model.grabInj();
             }else if (action.equals(dropInj)){
@@ -131,33 +135,35 @@ public class Building extends Environment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-			
-			//add(INJURED, 5, 5);
+			add(INJURED, 5, 5);
+			add(INJURED, 0, 1);
+			add(INJURED, 6, 8);
+			add(INJURED, 7, 2);
 		}
 		
 		void nextSlot(int securityID) throws Exception {
-			Location s2;
+			Location sec;
 			if(securityID == 1){
-				s2 = getAgPos(1);
+				sec = getAgPos(1);
 			}else {
-				s2 = getAgPos(2);
+				sec = getAgPos(2);
 			}
-			if(s2.x != 2 && s2.y == getHeight()-3){ // bottom side
-				s2.x--;
-			}else if (s2.x == getWidth()-3 && s2.y != getHeight()-3) { // right side
-                s2.y++;
-            }else if (s2.x == 2 && s2.y != 2){ // left side 
-				s2.y--;
-			}else if(s2.x != getWidth()-3 && s2.y == 2){ // top side
-				s2.x++;
+			if(sec.x != 2 && sec.y == getHeight()-3){ // bottom side
+				sec.x--;
+			}else if (sec.x == getWidth()-3 && sec.y != getHeight()-3) { // right side
+                sec.y++;
+            }else if (sec.x == 2 && sec.y != 2){ // left side 
+				sec.y--;
+			}else if(sec.x != getWidth()-3 && sec.y == 2){ // top side
+				sec.x++;
 			}else{
 				return;
 			}
 			if(securityID ==1){
-				setAgPos(1, s2);
+				setAgPos(1, sec);
 				setAgPos(1, getAgPos(1)); // just to draw it in the view
 			} else {
-				setAgPos(2, s2);
+				setAgPos(2, sec);
 				setAgPos(2, getAgPos(2)); // just to draw it in the view
 			}
 			setAgPos(0, getAgPos(0));
@@ -167,7 +173,22 @@ public class Building extends Environment {
 		}
 		
 		void moveTowards(int x, int y) throws Exception {
-            // TODO: paramedic moves toward injured
+            // I am using here only paramedic_1 with ID 3
+			Location par1 = getAgPos(3);
+			Location par2 = getAgPos(4);
+			Location par3 = getAgPos(5);
+			
+			if(par1.x < x)
+				par1.x++;
+			else if (par1.x > x)
+                par1.x--;
+            if (par1.y < y)
+                par1.y++;
+            else if (par1.y > y)
+                par1.y--;
+			setAgPos(3, par1);
+			setAgPos(4, getAgPos(4));
+			setAgPos(5, getAgPos(5));
         }
 		
 		void grabInj() {
@@ -236,7 +257,7 @@ public class Building extends Environment {
 
 		public void drawInjured(Graphics g, int x, int y) {
             super.drawObstacle(g, x, y);
-            g.setColor(Color.gray);
+            g.setColor(Color.white);
             drawString(g, x, y, defaultFont, "I");
         }
     }

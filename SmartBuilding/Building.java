@@ -45,7 +45,7 @@ public class Building extends Environment {
     @Override
     public boolean executeAction(String agName, Structure action) {
 
-        logger.info("executing: "+action+", but not implemented!");
+        //logger.info("executing: "+action+", but not implemented!");
 		
 		try {
             if (action.equals(s1)) {

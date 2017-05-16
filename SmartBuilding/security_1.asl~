@@ -9,16 +9,20 @@
 /* Initial goals */
 
 
-
+!start.
 !move.
-
-
+//!notify.
 
 /* Plans */
 
 
-//+!start : true <- .print("I am the security.").
-+!move : true 
++!start : true <- .print("I am working now.").
++!move : true  
 	<- next(security_1);
 		!move.
+
+//+!notify : true 
+//	<- .send(paramedic_1,tell,foundInj);
+//	.print("szoltam paramedic1-nek")
+//		!notify.
 

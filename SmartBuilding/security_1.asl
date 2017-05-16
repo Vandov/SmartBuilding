@@ -11,18 +11,19 @@
 
 !start.
 !move.
-//!notify.
+!notify.
 
 /* Plans */
 
-
 +!start : true <- .print("I am working now.").
+
 +!move : true  
 	<- next(security_1);
 		!move.
 
-//+!notify : true 
-//	<- .send(paramedic_1,tell,foundInj);
-//	.print("szoltam paramedic1-nek")
-//		!notify.
-
+// notify all paramedics
++!notify : true <- 	.print("I found an injured!");
+					.send(paramedic_1,tell,injuredFound); 
+					.send(paramedic_2,tell,injuredFound);
+					.send(paramedic_3,tell,injuredFound).
+					
