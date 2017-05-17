@@ -15,16 +15,16 @@ public class Building extends Environment {
 
 	public static final int INJURED  = 16;
 	public static final int GSize=10;
-	
+
 	private BuildingModel model;
     private BuildingView  view;
-	
+
 	public static final Term    s1 = Literal.parseLiteral("next(security_1)");
 	public static final Term    s2 = Literal.parseLiteral("next(security_2)");
     public static final Term    grabInj = Literal.parseLiteral("grag(injured)");
     public static final Term    dropInj = Literal.parseLiteral("drop(injured)");
     public static final Term    healInj = Literal.parseLiteral("heal(injured)");
-	
+
 	//public static final Literal inj1 = Literal.parseLiteral("injured(?)");
     //public static final Literal inj2 = Literal.parseLiteral("injured(?)");
 
@@ -41,17 +41,17 @@ public class Building extends Environment {
 		model.setView(view);
 		//updatePercepts();
     }
-	
+
     @Override
     public boolean executeAction(String agName, Structure action) {
 
         //logger.info("executing: "+action+", but not implemented!");
-		
+
 		try {
             if (action.equals(s1)) {
                 model.nextSlot(1);
             }else if (action.equals(s2)){
-				model.nextSlot(2);	
+				model.nextSlot(2);
 			}else if (action.getFunctor().equals("move_towards")) {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
@@ -66,7 +66,7 @@ public class Building extends Environment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
+
 		updatePercepts();
 
         try {
@@ -75,23 +75,23 @@ public class Building extends Environment {
         informAgsEnvironmentChanged();
         return true;
     }
-	
+
 	void updatePercepts() {
         clearPercepts();
-        
+
         Location r1Loc = model.getAgPos(0);
         Location r2Loc = model.getAgPos(1);
 		Location r3Loc = model.getAgPos(2);
         Location r4Loc = model.getAgPos(3);
 		Location r5Loc = model.getAgPos(4);
         Location r6Loc = model.getAgPos(5);
-        
-        Literal pos1 = Literal.parseLiteral("pos(r1," + r1Loc.x + "," + r1Loc.y + ")");
-        Literal pos2 = Literal.parseLiteral("pos(r2," + r2Loc.x + "," + r2Loc.y + ")");
-		Literal pos3 = Literal.parseLiteral("pos(r3," + r3Loc.x + "," + r3Loc.y + ")");
-        Literal pos4 = Literal.parseLiteral("pos(r4," + r4Loc.x + "," + r4Loc.y + ")");
-		Literal pos5 = Literal.parseLiteral("pos(r5," + r5Loc.x + "," + r5Loc.y + ")");
-        Literal pos6 = Literal.parseLiteral("pos(r6," + r6Loc.x + "," + r6Loc.y + ")");
+
+        Literal pos1 = Literal.parseLiteral("pos(doorman," + r1Loc.x + "," + r1Loc.y + ")");
+        Literal pos2 = Literal.parseLiteral("pos(security_1," + r2Loc.x + "," + r2Loc.y + ")");
+		Literal pos3 = Literal.parseLiteral("pos(security_2," + r3Loc.x + "," + r3Loc.y + ")");
+        Literal pos4 = Literal.parseLiteral("pos(paramedic_1," + r4Loc.x + "," + r4Loc.y + ")");
+		Literal pos5 = Literal.parseLiteral("pos(paramedic_2," + r5Loc.x + "," + r5Loc.y + ")");
+        Literal pos6 = Literal.parseLiteral("pos(paramedic_3," + r6Loc.x + "," + r6Loc.y + ")");
 
         addPercept(pos1);
         addPercept(pos2);
@@ -107,17 +107,17 @@ public class Building extends Environment {
     public void stop() {
         super.stop();
     }
-	
+
 	class BuildingModel extends GridWorldModel {
 
 		boolean param_1_hasGarb = false;
 		boolean param_2_hasGarb = false;
 		boolean param_3_hasGarb = false;
-		
+
         private BuildingModel() {
 			// Size of the map, num of agents to display
             super(GSize, GSize, 6);
-			
+
 			try {
 				// Agent with ID 0, and pos(0,0)
 				// Doorman
@@ -140,7 +140,7 @@ public class Building extends Environment {
 			add(INJURED, 6, 8);
 			add(INJURED, 7, 2);
 		}
-		
+
 		void nextSlot(int securityID) throws Exception {
 			Location sec;
 			if(securityID == 1){
@@ -152,7 +152,7 @@ public class Building extends Environment {
 				sec.x--;
 			}else if (sec.x == getWidth()-3 && sec.y != getHeight()-3) { // right side
                 sec.y++;
-            }else if (sec.x == 2 && sec.y != 2){ // left side 
+            }else if (sec.x == 2 && sec.y != 2){ // left side
 				sec.y--;
 			}else if(sec.x != getWidth()-3 && sec.y == 2){ // top side
 				sec.x++;
@@ -171,13 +171,13 @@ public class Building extends Environment {
 			setAgPos(4, getAgPos(4));
 			setAgPos(5, getAgPos(5));
 		}
-		
+
 		void moveTowards(int x, int y) throws Exception {
             // I am using here only paramedic_1 with ID 3
 			Location par1 = getAgPos(3);
 			Location par2 = getAgPos(4);
 			Location par3 = getAgPos(5);
-			
+
 			if(par1.x < x)
 				par1.x++;
 			else if (par1.x > x)
@@ -190,7 +190,7 @@ public class Building extends Environment {
 			setAgPos(4, getAgPos(4));
 			setAgPos(5, getAgPos(5));
         }
-		
+
 		void grabInj() {
             // TODO
         }
@@ -201,7 +201,7 @@ public class Building extends Environment {
             // TODO
         }
     }
-	
+
 	class BuildingView extends GridWorldView {
 
         public BuildingView(BuildingModel model) {
@@ -245,10 +245,10 @@ public class Building extends Environment {
                 }*/
             }
 			super.drawAgent(g, x, y, c, -1);
-           /* if (id == 0) { 
+           /* if (id == 0) {
                 g.setColor(Color.black);
             } else if (id == 1) {
-                g.setColor(Color.white);                
+                g.setColor(Color.white);
             }*/
 			g.setColor(Color.black);
             super.drawString(g, x, y, defaultFont, label);
@@ -262,5 +262,3 @@ public class Building extends Environment {
         }
     }
 }
-
-

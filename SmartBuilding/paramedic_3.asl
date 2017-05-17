@@ -4,13 +4,13 @@
 
 /* Initial beliefs and rules */
 
-
+injuredFound[source(A)].
 
 /* Initial goals */
 
 
 
-!start.
+//!start.
 
 
 
@@ -18,6 +18,6 @@
 
 
 
-+!start : true <- .print("I am working now.").
+//+!start : true <- .print("I am working now.").
 
-+injuredFound[source(A)] : true <- .print(A, " found an injured. I am busy now!").
++injuredFound[source(A)] <- .print(A, " found an injured. I am busy now!").

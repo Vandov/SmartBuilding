@@ -4,19 +4,23 @@
 
 /* Initial beliefs and rules */
 
+//at(P) :- pos(P,X,Y) & pos(paramedic_1,X,Y).
 
+injuredFound[source(A)].
 
 /* Initial goals */
 
-!start.
+//!start.
 /* Plans */
 
-+!start : true <- .print("I am working now.").
+//+!start : true <- .print("I am working now.").
 
-+injuredFound[source(A)] : true <- .print(A, " found an injured. I am on my way!").
+//+injuredFound[source(A)] : true <- .print(A, " found an injured. I am on my way!").
 
-+!at(L) : at(L).
+/*+!at(L) : at(L).
 +!at(L) <- ?pos(L,X,Y);
            move_towards(X,Y);
-           !at(L).
-		  
+		   .print("On my way.");
+           !at(L).*/
+		   
++injuredFound[source(A)] <- .print(A, " found an injured. I am busy now!").

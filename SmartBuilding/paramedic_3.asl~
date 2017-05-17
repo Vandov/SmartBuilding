@@ -18,6 +18,6 @@
 
 
 
-+!start : true <- .print("I am waiting for security").
++!start : true <- .print("I am working now.").
 
-
++injuredFound[source(A)] : true <- .print(A, " found an injured. I am busy now!").
