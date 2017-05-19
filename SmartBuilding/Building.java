@@ -16,36 +16,34 @@ public class Building extends Environment {
 	public static final int INJURED  = 16;
 	public static final int GSize=10;
 
-	private BuildingModel model;
-    private BuildingView  view;
-
 	public static final Term    s1 = Literal.parseLiteral("next(security_1)");
 	public static final Term    s2 = Literal.parseLiteral("next(security_2)");
-    public static final Term    grabInj = Literal.parseLiteral("grag(injured)");
-    public static final Term    dropInj = Literal.parseLiteral("drop(injured)");
     public static final Term    healInj = Literal.parseLiteral("heal(injured)");
+	public static final Term	look1 = Literal.parseLiteral("lookAround(security_1)");
+	public static final Term	look2 = Literal.parseLiteral("lookAround(security_2)");
 
 	//public static final Literal inj1 = Literal.parseLiteral("injured(?)");
     //public static final Literal inj2 = Literal.parseLiteral("injured(?)");
 
-    private Logger logger = Logger.getLogger("SmartBuilding.mas2j."+Building.class.getName());
+    static Logger logger = Logger.getLogger(Building.class.getName());
+	
+	private BuildingModel model;
+    private BuildingView  view;
 
     /** Called before the MAS execution with the args informed in .mas2j */
 
     @Override
-
     public void init(String[] args) {
-        super.init(args);
 		model = new BuildingModel();
 		view = new BuildingView(model);
 		model.setView(view);
-		//updatePercepts();
+		updatePercepts();
     }
 
     @Override
     public boolean executeAction(String agName, Structure action) {
 
-        //logger.info("executing: "+action+", but not implemented!");
+        logger.info(agName + " doing: " + action);
 
 		try {
             if (action.equals(s1)) {
@@ -56,12 +54,12 @@ public class Building extends Environment {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
                 model.moveTowards(x,y);
-			}else if (action.equals(grabInj)){
-                // model.grabInj();
-            }else if (action.equals(dropInj)){
-                // model.dropInj();
-            }else if (action.equals(healInj)){
+			}else if (action.equals(healInj)){
                 // model.healInj();
+            }else if (action.equals(look1)){
+                model.lookAround(1);
+            }else if (action.equals(look2)){
+                model.lookAround(2);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,6 +168,18 @@ public class Building extends Environment {
 			setAgPos(3, getAgPos(3));
 			setAgPos(4, getAgPos(4));
 			setAgPos(5, getAgPos(5));
+		}
+		
+		void lookAround(int id) throws Exception {
+			if(id == 1){
+				if (model.hasObject(INJURED, getAgPos(1))){
+					logger.info("HALLELUJA_1");
+				}
+			}else if (id == 2){
+				if (model.hasObject(INJURED, getAgPos(2))){
+					logger.info("HALLELUJA_2");
+				}
+			}
 		}
 
 		void moveTowards(int x, int y) throws Exception {
