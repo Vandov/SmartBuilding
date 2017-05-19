@@ -18,6 +18,6 @@
 
 
 
-+!start : true <- .print("I do shit.").
++!start : true <- .print("I am a happy potato.").
 
 

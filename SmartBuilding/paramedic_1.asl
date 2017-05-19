@@ -1,7 +1,6 @@
 // Agent paramedic_1 in project SmartBuilding.mas2j
 
 
-
 /* Initial beliefs and rules */
 
 injuredFound[source(A)].
@@ -10,6 +9,8 @@ injuredFound[source(A)].
 
 /* Plans */
 
-+injuredFound[source(A)] <- .print(A, " found an injured.").
++injuredFound[source(A)] : not .desire(start)<- .print(A, " found an injured.");
+													!start.
 
-+injured(paramedic_1) : true <- heal(injured).
++!start <- startWorking(paramedic_1);
+					!start.

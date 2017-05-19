@@ -22,10 +22,4 @@
 	lookAround(security_1);
 	.send(paramedic_1,tell,injuredFound);
 		!move.
-
-// notify all paramedics
-+!notify : true <- 	.print("I found an injured!");
-					.send(paramedic_1,tell,injuredFound); 
-					.send(paramedic_2,tell,injuredFound);
-					.send(paramedic_3,tell,injuredFound).
 					

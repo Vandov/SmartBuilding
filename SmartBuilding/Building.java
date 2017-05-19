@@ -23,9 +23,9 @@ public class Building extends Environment {
     public static final Term    healInj = Literal.parseLiteral("heal(injured)");
 	public static final Term	look1 = Literal.parseLiteral("lookAround(security_1)");
 	public static final Term	look2 = Literal.parseLiteral("lookAround(security_2)");
+	public static final Term	work = Literal.parseLiteral("startWorking(paramedic_1)");
 
-	//public static final Literal inj1 = Literal.parseLiteral("injured(?)");
-    //public static final Literal inj2 = Literal.parseLiteral("injured(?)");
+	public static Location StartPos_Param1;
 
     static Logger logger = Logger.getLogger(Building.class.getName());
 	
@@ -61,7 +61,9 @@ public class Building extends Environment {
                 model.lookAround(1);
             }else if (action.equals(look2)){
                 model.lookAround(2);
-            }
+            }else if(action.equals(work)){
+				model.notifyParamedics();
+			}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,22 +84,16 @@ public class Building extends Environment {
         Location r2Loc = model.getAgPos(1);
 		Location r3Loc = model.getAgPos(2);
         Location r4Loc = model.getAgPos(3);
-		Location r5Loc = model.getAgPos(4);
-        Location r6Loc = model.getAgPos(5);
 
         Literal pos1 = Literal.parseLiteral("pos(doorman," + r1Loc.x + "," + r1Loc.y + ")");
         Literal pos2 = Literal.parseLiteral("pos(security_1," + r2Loc.x + "," + r2Loc.y + ")");
 		Literal pos3 = Literal.parseLiteral("pos(security_2," + r3Loc.x + "," + r3Loc.y + ")");
         Literal pos4 = Literal.parseLiteral("pos(paramedic_1," + r4Loc.x + "," + r4Loc.y + ")");
-		Literal pos5 = Literal.parseLiteral("pos(paramedic_2," + r5Loc.x + "," + r5Loc.y + ")");
-        Literal pos6 = Literal.parseLiteral("pos(paramedic_3," + r6Loc.x + "," + r6Loc.y + ")");
 
         addPercept(pos1);
         addPercept(pos2);
 		addPercept(pos3);
         addPercept(pos4);
-		addPercept(pos5);
-        addPercept(pos6);
     }
 
     /** Called before the end of MAS execution */
@@ -109,11 +105,7 @@ public class Building extends Environment {
 
 	class BuildingModel extends GridWorldModel {
 
-		boolean param_1_hasGarb = false;
-		boolean param_2_hasGarb = false;
-		boolean param_3_hasGarb = false;
-
-        private BuildingModel() {
+		private BuildingModel() {
 			// Size of the map, num of agents to display
             super(GSize, GSize, 6);
 
@@ -126,18 +118,15 @@ public class Building extends Environment {
 				setAgPos(2, 7, 7);
 				// Paramedic
 				setAgPos(3, 9, 0);
-				setAgPos(4, 9, 1);
-				setAgPos(5, 9, 2);
-				// Injured
-				setAgPos(INJURED, 5, 5);
-				setAgPos(INJURED, 6, 4);
+				
+				StartPos_Param1 = getAgPos(3);
+				
             } catch (Exception e) {
                 e.printStackTrace();
             }
-			add(INJURED, 5, 5);
+			add(INJURED, 7, 7);
 			add(INJURED, 0, 1);
-			add(INJURED, 6, 8);
-			add(INJURED, 7, 2);
+			add(INJURED, 8, 3);
 		}
 
 		void nextSlot(int securityID) throws Exception {
@@ -167,8 +156,6 @@ public class Building extends Environment {
 			}
 			setAgPos(0, getAgPos(0));
 			setAgPos(3, getAgPos(3));
-			setAgPos(4, getAgPos(4));
-			setAgPos(5, getAgPos(5));
 		}
 		
 		void lookAround(int id) throws Exception {
@@ -211,11 +198,18 @@ public class Building extends Environment {
 			}
 		}
 
+		void notifyParamedics() throws Exception{
+			if(injureds.size()!=0){
+				model.moveTowards(injureds.get(0).x, injureds.get(0).y);
+				healInj();
+			}else{
+				model.moveTowards(9, 0);
+			}
+		}
+		
 		void moveTowards(int x, int y) throws Exception {
             // I am using here only paramedic_1 with ID 3
 			Location par1 = getAgPos(3);
-			Location par2 = getAgPos(4);
-			Location par3 = getAgPos(5);
 
 			if(par1.x < x)
 				par1.x++;
@@ -226,12 +220,12 @@ public class Building extends Environment {
             else if (par1.y > y)
                 par1.y--;
 			setAgPos(3, par1);
-			setAgPos(4, getAgPos(4));
-			setAgPos(5, getAgPos(5));
         }
+		
         void healInj() {
 			if(model.hasObject(INJURED, getAgPos(3))){
 				remove(INJURED, getAgPos(3));
+				injureds.remove(0);
 			}
         }
     }
@@ -260,30 +254,18 @@ public class Building extends Environment {
 				case 0: label="D"; break;
 				case 1: label="S"; break;
 				case 2: label="S"; break;
-				default: label="P"; break;
+				case 3: label="P"; break;
+				default: label="X"; break;
 			}
 			label=label+(id+1);
 			c = Color.blue;
             if (id == 0) {
                 c = Color.yellow;
-                /*if (((MarsModel)model).r1HasGarb) {
-                    label += " - G";
-                    c = Color.orange;
-                }*/
             }
-			if (id == 3 || id ==4 || id == 5) {
+			if (id == 3) {
                 c = Color.red;
-                /*if (((MarsModel)model).r1HasGarb) {
-                    label += " - G";
-                    c = Color.orange;
-                }*/
             }
 			super.drawAgent(g, x, y, c, -1);
-           /* if (id == 0) {
-                g.setColor(Color.black);
-            } else if (id == 1) {
-                g.setColor(Color.white);
-            }*/
 			g.setColor(Color.black);
             super.drawString(g, x, y, defaultFont, label);
             repaint();
