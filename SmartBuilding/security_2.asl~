@@ -18,6 +18,7 @@
 +!start : true <- .print("I am working now.").
 +!move : true 
 	<- next(security_2);
+	.lookAround(security_2);
 		!move.
 
 // notify all paramedics

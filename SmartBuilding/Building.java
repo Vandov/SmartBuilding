@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Building extends Environment {
@@ -29,7 +31,7 @@ public class Building extends Environment {
 	
 	private BuildingModel model;
     private BuildingView  view;
-
+	private List<Injured> injureds = new ArrayList<>();
     /** Called before the MAS execution with the args informed in .mas2j */
 
     @Override
@@ -43,11 +45,7 @@ public class Building extends Environment {
     @Override
     public boolean executeAction(String agName, Structure action) {
 
-<<<<<<< HEAD
         logger.info(agName + " doing: " + action);
-
-=======
->>>>>>> 97416d3923b5144857f6e10c3f82d3c0dab4cb76
 		try {
             if (action.equals(s1)) {
                 model.nextSlot(1);
@@ -57,12 +55,8 @@ public class Building extends Environment {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
                 model.moveTowards(x,y);
-<<<<<<< HEAD
-			}else if (action.equals(healInj)){
-=======
             }else if (action.equals(healInj)){
->>>>>>> 97416d3923b5144857f6e10c3f82d3c0dab4cb76
-                // model.healInj();
+				model.healInj();
             }else if (action.equals(look1)){
                 model.lookAround(1);
             }else if (action.equals(look2)){
@@ -179,12 +173,40 @@ public class Building extends Environment {
 		
 		void lookAround(int id) throws Exception {
 			if(id == 1){
-				if (model.hasObject(INJURED, getAgPos(1))){
-					logger.info("HALLELUJA_1");
-				}
+				Location sec1 = getAgPos(1);
+				for(int x = sec1.x-2; x < sec1.x+2; x++){
+					for(int y = sec1.y-2; y < sec1.y+2; y++){
+						if (model.hasObject(INJURED, x, y)){
+							boolean found = false;
+							for(int i = 0; i < injureds.size(); i++){
+								if(injureds.get(i).x == x && injureds.get(i).y == y){
+									found = true;
+								}
+							}
+							if(!found){
+								logger.info("injured found by security_1 at " + x + ":" + y);
+								injureds.add(new Injured(x,y));
+							}
+						}
+					}
+				}	
 			}else if (id == 2){
-				if (model.hasObject(INJURED, getAgPos(2))){
-					logger.info("HALLELUJA_2");
+				Location sec2 = getAgPos(2);
+				for(int x = sec2.x-2; x < sec2.x+2; x++){
+					for(int y = sec2.y-2; y < sec2.y+2; y++){
+						if (model.hasObject(INJURED, x, y)){
+							boolean found = false;
+							for(int i = 0; i < injureds.size(); i++){
+								if(injureds.get(i).x == x && injureds.get(i).y == y){
+									found = true;
+								}
+							}
+							if(!found){
+								logger.info("injured found by security_2 at " + x + ":" + y);
+								injureds.add(new Injured(x,y));
+							}
+						}
+					}
 				}
 			}
 		}
@@ -273,4 +295,14 @@ public class Building extends Environment {
             drawString(g, x, y, defaultFont, "I");
         }
     }
+	
+	class Injured {
+		public int x;
+		public int y;
+		
+		public Injured(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
 }

@@ -19,7 +19,7 @@
 
 +!move : true  
 	<- next(security_1);
-	.lookAround(security_1);
+	lookAround(security_1);
 	.send(paramedic_1,tell,injuredFound);
 		!move.
 
