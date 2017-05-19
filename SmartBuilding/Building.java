@@ -28,7 +28,7 @@ public class Building extends Environment {
 	public static Location StartPos_Param1;
 
     static Logger logger = Logger.getLogger(Building.class.getName());
-	
+
 	private BuildingModel model;
     private BuildingView  view;
 	private List<Injured> injureds = new ArrayList<>();
@@ -118,9 +118,9 @@ public class Building extends Environment {
 				setAgPos(2, 7, 7);
 				// Paramedic
 				setAgPos(3, 9, 0);
-				
+
 				StartPos_Param1 = getAgPos(3);
-				
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -157,7 +157,7 @@ public class Building extends Environment {
 			setAgPos(0, getAgPos(0));
 			setAgPos(3, getAgPos(3));
 		}
-		
+
 		void lookAround(int id) throws Exception {
 			if(id == 1){
 				Location sec1 = getAgPos(1);
@@ -176,7 +176,7 @@ public class Building extends Environment {
 							}
 						}
 					}
-				}	
+				}
 			}else if (id == 2){
 				Location sec2 = getAgPos(2);
 				for(int x = sec2.x-2; x < sec2.x+2; x++){
@@ -201,12 +201,15 @@ public class Building extends Environment {
 		void notifyParamedics() throws Exception{
 			if(injureds.size()!=0){
 				model.moveTowards(injureds.get(0).x, injureds.get(0).y);
-				healInj();
+				Location par = getAgPos(3);
+				if (injureds.get(0).x == par.x && injureds.get(0).y == par.y){
+					healInj();
+				}
 			}else{
 				model.moveTowards(9, 0);
 			}
 		}
-		
+
 		void moveTowards(int x, int y) throws Exception {
             // I am using here only paramedic_1 with ID 3
 			Location par1 = getAgPos(3);
@@ -221,7 +224,7 @@ public class Building extends Environment {
                 par1.y--;
 			setAgPos(3, par1);
         }
-		
+
         void healInj() {
 			if(model.hasObject(INJURED, getAgPos(3))){
 				remove(INJURED, getAgPos(3));
@@ -277,11 +280,11 @@ public class Building extends Environment {
             drawString(g, x, y, defaultFont, "I");
         }
     }
-	
+
 	class Injured {
 		public int x;
 		public int y;
-		
+
 		public Injured(int x, int y){
 			this.x = x;
 			this.y = y;
