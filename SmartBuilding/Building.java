@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class Building extends Environment {
 
-	public static final int INJURED  = 16;
+	public static final int INJURED=16;
 	public static final int GSize=10;
 
 	private BuildingModel model;
@@ -21,8 +21,6 @@ public class Building extends Environment {
 
 	public static final Term    s1 = Literal.parseLiteral("next(security_1)");
 	public static final Term    s2 = Literal.parseLiteral("next(security_2)");
-    public static final Term    grabInj = Literal.parseLiteral("grag(injured)");
-    public static final Term    dropInj = Literal.parseLiteral("drop(injured)");
     public static final Term    healInj = Literal.parseLiteral("heal(injured)");
 
 	//public static final Literal inj1 = Literal.parseLiteral("injured(?)");
@@ -45,8 +43,6 @@ public class Building extends Environment {
     @Override
     public boolean executeAction(String agName, Structure action) {
 
-        //logger.info("executing: "+action+", but not implemented!");
-
 		try {
             if (action.equals(s1)) {
                 model.nextSlot(1);
@@ -56,10 +52,6 @@ public class Building extends Environment {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
                 model.moveTowards(x,y);
-			}else if (action.equals(grabInj)){
-                // model.grabInj();
-            }else if (action.equals(dropInj)){
-                // model.dropInj();
             }else if (action.equals(healInj)){
                 // model.healInj();
             }
@@ -190,15 +182,10 @@ public class Building extends Environment {
 			setAgPos(4, getAgPos(4));
 			setAgPos(5, getAgPos(5));
         }
-
-		void grabInj() {
-            // TODO
-        }
-        void dropInj() {
-            // TODO
-        }
         void healInj() {
-            // TODO
+			if(model.hasObject(INJURED, getAgPos(3))){
+				remove(INJURED, getAgPos(3));
+			}
         }
     }
 
