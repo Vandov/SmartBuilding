@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class Building extends Environment {
 
-	public static final int INJURED  = 16;
+	public static final int INJURED=16;
 	public static final int GSize=10;
 
 	public static final Term    s1 = Literal.parseLiteral("next(security_1)");
@@ -43,8 +43,11 @@ public class Building extends Environment {
     @Override
     public boolean executeAction(String agName, Structure action) {
 
+<<<<<<< HEAD
         logger.info(agName + " doing: " + action);
 
+=======
+>>>>>>> 97416d3923b5144857f6e10c3f82d3c0dab4cb76
 		try {
             if (action.equals(s1)) {
                 model.nextSlot(1);
@@ -54,7 +57,11 @@ public class Building extends Environment {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
                 model.moveTowards(x,y);
+<<<<<<< HEAD
 			}else if (action.equals(healInj)){
+=======
+            }else if (action.equals(healInj)){
+>>>>>>> 97416d3923b5144857f6e10c3f82d3c0dab4cb76
                 // model.healInj();
             }else if (action.equals(look1)){
                 model.lookAround(1);
@@ -200,15 +207,10 @@ public class Building extends Environment {
 			setAgPos(4, getAgPos(4));
 			setAgPos(5, getAgPos(5));
         }
-
-		void grabInj() {
-            // TODO
-        }
-        void dropInj() {
-            // TODO
-        }
         void healInj() {
-            // TODO
+			if(model.hasObject(INJURED, getAgPos(3))){
+				remove(INJURED, getAgPos(3));
+			}
         }
     }
 
